@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="ClientSocket.cs" />
     <Compile Include="Data.cs" />
-    <Compile Include="EnumCommand.cs" />
     <Compile Include="EnumFunction.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

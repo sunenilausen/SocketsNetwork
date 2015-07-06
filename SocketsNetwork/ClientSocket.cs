@@ -47,19 +47,18 @@ namespace SocketsNetwork
                 //Connect to the server
                 clientSocket.BeginConnect(ipEndPoint, new AsyncCallback(OnConnect), null);
 
-                Debug.WriteLine("SGSclientTCP: " + strName);
+                Debug.WriteLine("Username: " + strName);
 
                 //The user has logged into the system so we now request the server to send
                 //the names of all users who are in the chat room
-                Data msgToSend = new Data();
-                msgToSend.cmdCommand = Command.List;
-                msgToSend.strName = strName;
-                msgToSend.strMessage = null;
-                msgToSend.function = Function.Null;
+                //Data msgToSend = new Data();
+                //msgToSend.strName = strName;
+                //msgToSend.function = Function.List;
+                //msgToSend.objects = null;
 
-                byteData = msgToSend.ToByte();
+                //byteData = msgToSend.ToByte();
 
-                clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+                //clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
 
                 byteData = new byte[1024];
                 //Start listening to the data asynchronously
@@ -80,15 +79,15 @@ namespace SocketsNetwork
 
                 //We are connected so we login into the server
                 Data msgToSend = new Data();
-                msgToSend.cmdCommand = Command.Login;
                 msgToSend.strName = strName;
-                msgToSend.strMessage = null;
-                msgToSend.function = Function.Null;
+                msgToSend.function = Function.Login;
+                msgToSend.objects = new object[] {null};
 
                 byte[] b = msgToSend.ToByte();
 
                 //Send the message to the server
                 clientSocket.BeginSend(b, 0, b.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+                SendFunction(Function.DebugMessage, strName + " has connected.");
             }
             catch (Exception exc) { Debug.WriteLine(exc.ToString()); }
         }
@@ -100,10 +99,7 @@ namespace SocketsNetwork
                 Data msgToSend = new Data();
 
                 msgToSend.strName = strName;
-                msgToSend.strMessage = null;
-                msgToSend.cmdCommand = Command.Function;
                 msgToSend.function = function;
-
                 msgToSend.objects = objects;
 
                 byte[] byteData = new byte[1024];
@@ -169,27 +165,14 @@ namespace SocketsNetwork
                 //Debug.WriteLine(msgReceived.strName);
 
                 //Accordingly process the message received
-                switch (msgReceived.cmdCommand)
-                {
-                    case Command.Function:
-                        Form1.Instance.DetermineFunction(msgReceived.function, msgReceived.objects);
-                        break;
-
-                    case Command.Login:
-                        Debug.WriteLine("Logged In:" + msgReceived.strName);
-                        break;
-
-                    case Command.Logout:
-                        Debug.WriteLine("Logged Out:" + msgReceived.strName);
-                        break;
-
-                    case Command.Message:
-                        break;
-
-                    case Command.List:
-                        Debug.WriteLine("<<<" + strName + " has joined the room>>>\r\n");
-                        break;
-                }
+                if (msgReceived.function == Function.Login)
+                    Debug.WriteLine("Logged In:" + msgReceived.strName);
+                else if (msgReceived.function == Function.Logout) 
+                    Debug.WriteLine("Logged Out:" + msgReceived.strName);
+                else if (msgReceived.function == Function.List)
+                    Debug.WriteLine("<<<" + strName + " has joined the room>>>\r\n");
+                else
+                    Form1.Instance.DetermineFunction(msgReceived.function, msgReceived.objects);
 
                 //if (msgReceived.strMessage != null && msgReceived.cmdCommand != Command.List)
                 //    txtChatBox.Text += msgReceived.strMessage + "\r\n";

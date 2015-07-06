@@ -101,9 +101,9 @@ namespace SocketsNetwork
 
                 msgToSend = msgReceived;
 
-                switch (msgReceived.cmdCommand)
+                switch (msgReceived.function)
                 {
-                    case Command.Login:
+                    case Function.Login:
 
                         //When a user logs in to the server then we add her to our
                         //list of clients
@@ -115,10 +115,10 @@ namespace SocketsNetwork
                         clientList.Add(clientInfo);
 
                         //Set the text of the message that we will broadcast to all users
-                        msgToSend.strMessage = "<<<" + msgReceived.strName + " has joined the room>>>";
+                        msgToSend.objects = new object[] {"<<<" + msgReceived.strName + " has joined the room>>>"};
                         break;
 
-                    case Command.Logout:
+                    case Function.Logout:
 
                         //When a user wants to log out of the server then we search for her 
                         //in the list of clients and close the corresponding connection
@@ -136,45 +136,43 @@ namespace SocketsNetwork
 
                         clientSocket.Close();
 
-                        msgToSend.strMessage = "<<<" + msgReceived.strName + " has left the room>>>";
+                        msgToSend.objects = new object[] {"<<<" + msgReceived.strName + " has left the room>>>"};
                         break;
 
-                    case Command.Message:
+                    //case Function.Message:
 
-                        //Set the text of the message that we will broadcast to all users
-                        msgToSend.strMessage = msgReceived.strName + ": " + msgReceived.strMessage;
-                        break;
+                    //    //Set the text of the message that we will broadcast to all users
+                    //    msgToSend.objects = new object[] {msgReceived.strName + ": " + msgReceived.objects[0]};
+                    //    break;
 
-                    case Command.List:
+                    //case Function.List:
 
-                        //Send the names of all users in the chat room to the new user
-                        msgToSend.cmdCommand = Command.List;
-                        msgToSend.strName = null;
-                        msgToSend.strMessage = null;
-                        msgToSend.function = Function.Null;
-                        msgToSend.objects = null;
+                    //    //Send the names of all users in the chat room to the new user
+                    //    msgToSend.function = Function.List;
+                    //    msgToSend.strName = null;
+                    //    msgToSend.function = Function.Null;
+                    //    msgToSend.objects = null;
 
-                        //Collect the names of the user in the chat room
-                        foreach (ClientInfo client in clientList)
-                        {
-                            //To keep things simple we use asterisk as the marker to separate the user names
-                            msgToSend.strMessage += client.strName + "*";
-                        }
+                    //    List<object> tempList = new List<object>();
+                    //    //Collect the names of the user in the chat room
+                    //    foreach (ClientInfo client in clientList)
+                    //    {
+                    //        //To keep things simple we use asterisk as the marker to separate the user names
+                    //        tempList.Add(client.strName + "*");
+                                
+                    //    }
+                    //    msgToSend.objects = tempList.ToArray();
 
-                        // message = msgToSend.ToByte();
-                        Array.Copy(msgToSend.ToByte(), message, msgToSend.ToByte().Length);
+                    //    // message = msgToSend.ToByte();
+                    //    Array.Copy(msgToSend.ToByte(), message, msgToSend.ToByte().Length);
 
-                        //Send the name of the users in the chat room
-                        clientSocket.BeginSend(message, 0, message.Length, SocketFlags.None,
-                                new AsyncCallback(OnSend), clientSocket);
-                        break;
-
-                    case Command.Function:
-                        //Debug.WriteLine(msgReceived.function.ToString());
-                        break;
+                    //    //Send the name of the users in the chat room
+                    //    clientSocket.BeginSend(message, 0, message.Length, SocketFlags.None,
+                    //            new AsyncCallback(OnSend), clientSocket);
+                    //    break;
                 }
 
-                if (msgToSend.cmdCommand != Command.List)   //List messages are not broadcasted
+                if (msgToSend.function != Function.List)   //List messages are not broadcasted
                 {
                     //message = msgToSend.ToByte();
                     Array.Copy(msgToSend.ToByte(), message, msgToSend.ToByte().Length);
@@ -182,7 +180,7 @@ namespace SocketsNetwork
                     foreach (ClientInfo clientInfo in clientList)
                     {
                         if (clientInfo.socket != clientSocket ||
-                            msgToSend.cmdCommand != Command.Login)
+                            msgToSend.function != Function.Login)
                         {
                             //Send the message to all users
                             clientInfo.socket.BeginSend(message, 0, message.Length, SocketFlags.None,
@@ -194,7 +192,7 @@ namespace SocketsNetwork
                 }
 
                 //If the user is logging out then we need not listen from her
-                if (msgReceived.cmdCommand != Command.Logout)
+                if (msgReceived.function != Function.Logout)
                 {
                     //Start listening to the message send by the user
                     clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);

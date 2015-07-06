@@ -42,17 +42,21 @@ namespace SocketsNetwork
         private void connectButton_Click(object sender, EventArgs e)
         {
             ClientSocket.Instance.JoinRoom(usernameTextbox.Text, ipTextbox.Text);
-            ClientSocket.Instance.SendFunction(Function.InitSuccess);
         }
 
         private void sendButton_Click(object sender, EventArgs e)
         {
-            ClientSocket.Instance.SendFunction(Function.StringMessage, messageTextbox.Text);
+            ClientSocket.Instance.SendFunction(Function.DebugMessage, messageTextbox.Text);
         }
 
-        public void AddMessage(string s)
+        public void DebugMessage(string s)
         {
             Debug.WriteLine(s);
+           
+        }
+        public void TextBoxMessage(string s)
+        {
+           // Debug.WriteLine(s);
             //if(this.receivedTextbox.IsHandleCreated)
             //if (receivedTextbox.InvokeRequired)
             //{
@@ -80,8 +84,8 @@ namespace SocketsNetwork
                 case Function.InitSuccess:
                     InitSuccess();
                     break;
-                case Function.StringMessage:
-                    AddMessage((string)objects[0]);
+                case Function.DebugMessage:
+                    DebugMessage((string)objects[0]);
                     break;
             }
         }
