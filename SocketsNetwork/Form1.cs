@@ -26,10 +26,6 @@ namespace SocketsNetwork
         public Form1()
         {
             InitializeComponent();
-            //Debug.WriteLine(this.receivedTextbox.IsHandleCreated);
-            //this.receivedTextbox.CreateControl();
-            //if (this.receivedTextbox.Handle != null)
-            //Debug.WriteLine(this.receivedTextbox.IsHandleCreated);
         }
 
 
@@ -57,19 +53,6 @@ namespace SocketsNetwork
         public void TextBoxMessage(string s)
         {
            // Debug.WriteLine(s);
-            //if(this.receivedTextbox.IsHandleCreated)
-            //if (receivedTextbox.InvokeRequired)
-            //{
-            //    this.Invoke(new Action<string>(AddMessage), new object[] { s });
-            //    return;
-            //}
-
-            //receivedTextbox.Text += s + "\n";
-            //receivedTextbox.Invoke(new Action(() => receivedTextbox.Text += s + "\n"));
-            //this.Dispatcher.Invoke((Action)(() =>
-            //{ 
-            //    receivedTextbox.AppendText(s);
-            //}));
         }
 
         public void InitSuccess()

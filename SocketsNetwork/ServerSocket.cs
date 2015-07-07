@@ -84,7 +84,6 @@ namespace SocketsNetwork
 
         private void OnReceive(IAsyncResult ar)
         {
-            //Debug.WriteLine("sOnReceive");
             try
             {
                 Socket clientSocket = (Socket)ar.AsyncState;
@@ -138,43 +137,10 @@ namespace SocketsNetwork
 
                         msgToSend.objects = new object[] {"<<<" + msgReceived.strName + " has left the room>>>"};
                         break;
-
-                    //case Function.Message:
-
-                    //    //Set the text of the message that we will broadcast to all users
-                    //    msgToSend.objects = new object[] {msgReceived.strName + ": " + msgReceived.objects[0]};
-                    //    break;
-
-                    //case Function.List:
-
-                    //    //Send the names of all users in the chat room to the new user
-                    //    msgToSend.function = Function.List;
-                    //    msgToSend.strName = null;
-                    //    msgToSend.function = Function.Null;
-                    //    msgToSend.objects = null;
-
-                    //    List<object> tempList = new List<object>();
-                    //    //Collect the names of the user in the chat room
-                    //    foreach (ClientInfo client in clientList)
-                    //    {
-                    //        //To keep things simple we use asterisk as the marker to separate the user names
-                    //        tempList.Add(client.strName + "*");
-                                
-                    //    }
-                    //    msgToSend.objects = tempList.ToArray();
-
-                    //    // message = msgToSend.ToByte();
-                    //    Array.Copy(msgToSend.ToByte(), message, msgToSend.ToByte().Length);
-
-                    //    //Send the name of the users in the chat room
-                    //    clientSocket.BeginSend(message, 0, message.Length, SocketFlags.None,
-                    //            new AsyncCallback(OnSend), clientSocket);
-                    //    break;
                 }
 
                 if (msgToSend.function != Function.List)   //List messages are not broadcasted
                 {
-                    //message = msgToSend.ToByte();
                     Array.Copy(msgToSend.ToByte(), message, msgToSend.ToByte().Length);
 
                     foreach (ClientInfo clientInfo in clientList)
@@ -187,8 +153,6 @@ namespace SocketsNetwork
                                 new AsyncCallback(OnSend), clientInfo.socket);
                         }
                     }
-
-                    //Debug.WriteLine(msgToSend.strMessage + "\r\n");
                 }
 
                 //If the user is logging out then we need not listen from her
@@ -196,7 +160,6 @@ namespace SocketsNetwork
                 {
                     //Start listening to the message send by the user
                     clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);
-                    //Debug.WriteLine("Continue receiving");
                 }
             }
             catch (Exception exc) { Debug.WriteLine(exc.ToString()); }
@@ -213,18 +176,3 @@ namespace SocketsNetwork
         }
     }
 }
-//if (read > 0)
-//    {
-//        //state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, read));
-//        state.result.AddRange(state.buffer);
-//        clientSocket.BeginReceive(state.buffer, 0, StateObject.bufferSize, 0,
-//            new AsyncCallback(ReadCallback), state);
-//    }
-//    else
-//    {
-//        if (state.result.Count > 1)
-//        {
-//            // All the data has been read from the client;
-//            // display it on the console.
-//            byte[] content = state.result.ToArray();
-//            //Transform the array of bytes received from the user int
