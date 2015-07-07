@@ -31,12 +31,12 @@
             this.connectButton = new System.Windows.Forms.Button();
             this.createButton = new System.Windows.Forms.Button();
             this.sendButton = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.receivedTextbox = new System.Windows.Forms.TextBox();
             this.usernameTextbox = new System.Windows.Forms.TextBox();
             this.ipTextbox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.messageTextbox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -49,6 +49,7 @@
             this.connectButton.TabIndex = 0;
             this.connectButton.Text = "Connect";
             this.connectButton.UseVisualStyleBackColor = true;
+            this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
             // 
             // createButton
             // 
@@ -58,6 +59,7 @@
             this.createButton.TabIndex = 1;
             this.createButton.Text = "Create Server";
             this.createButton.UseVisualStyleBackColor = true;
+            this.createButton.Click += new System.EventHandler(this.createButton_Click);
             // 
             // sendButton
             // 
@@ -67,14 +69,17 @@
             this.sendButton.TabIndex = 2;
             this.sendButton.Text = "Send";
             this.sendButton.UseVisualStyleBackColor = true;
+            this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
             // 
-            // textBox1
+            // receivedTextbox
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 177);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(186, 214);
-            this.textBox1.TabIndex = 3;
+            this.receivedTextbox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.receivedTextbox.Location = new System.Drawing.Point(12, 177);
+            this.receivedTextbox.Multiline = true;
+            this.receivedTextbox.Name = "receivedTextbox";
+            this.receivedTextbox.ReadOnly = true;
+            this.receivedTextbox.Size = new System.Drawing.Size(186, 214);
+            this.receivedTextbox.TabIndex = 3;
             // 
             // usernameTextbox
             // 
@@ -108,12 +113,12 @@
             this.label2.TabIndex = 7;
             this.label2.Text = "Username:";
             // 
-            // textBox2
+            // messageTextbox
             // 
-            this.textBox2.Location = new System.Drawing.Point(12, 124);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 8;
+            this.messageTextbox.Location = new System.Drawing.Point(12, 124);
+            this.messageTextbox.Name = "messageTextbox";
+            this.messageTextbox.Size = new System.Drawing.Size(100, 20);
+            this.messageTextbox.TabIndex = 8;
             // 
             // label3
             // 
@@ -140,12 +145,12 @@
             this.ClientSize = new System.Drawing.Size(255, 413);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.messageTextbox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ipTextbox);
             this.Controls.Add(this.usernameTextbox);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.receivedTextbox);
             this.Controls.Add(this.sendButton);
             this.Controls.Add(this.createButton);
             this.Controls.Add(this.connectButton);
@@ -161,14 +166,14 @@
         private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.Button createButton;
         private System.Windows.Forms.Button sendButton;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox usernameTextbox;
         private System.Windows.Forms.TextBox ipTextbox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox messageTextbox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox receivedTextbox;
     }
 }
 
