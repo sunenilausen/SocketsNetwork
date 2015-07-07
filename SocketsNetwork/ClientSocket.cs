@@ -49,17 +49,6 @@ namespace SocketsNetwork
 
                 Debug.WriteLine("Username: " + strName);
 
-                //The user has logged into the system so we now request the server to send
-                //the names of all users who are in the chat room
-                //Data msgToSend = new Data();
-                //msgToSend.strName = strName;
-                //msgToSend.function = Function.List;
-                //msgToSend.objects = null;
-
-                //byteData = msgToSend.ToByte();
-
-                //clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
-
                 byteData = new byte[1024];
                 //Start listening to the data asynchronously
                 clientSocket.BeginReceive(byteData,
@@ -104,14 +93,10 @@ namespace SocketsNetwork
 
                 byte[] byteData = new byte[1024];
                 Array.Copy(msgToSend.ToByte(), byteData, msgToSend.ToByte().Length);
-
+             
+                //Send it to the server
                 Send(clientSocket, byteData);
                 sendDone.WaitOne();
-
-
-                //Send it to the server
-                //clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
-                //Debug.WriteLine("sendfunction");
             }
             catch (Exception exc) { Debug.WriteLine(exc.ToString()); }
         }
@@ -143,7 +128,6 @@ namespace SocketsNetwork
 
                 // Complete sending the data to the remote device.
                 int bytesSent = client.EndSend(ar);
-                //Debug.WriteLine("Sent " + bytesSent + " bytes to server.");
 
                 // Signal that all bytes have been sent.
                 sendDone.Set();
@@ -162,8 +146,6 @@ namespace SocketsNetwork
 
                 Data msgReceived = new Data(byteData);
 
-                //Debug.WriteLine(msgReceived.strName);
-
                 //Accordingly process the message received
                 if (msgReceived.function == Function.Login)
                     Debug.WriteLine("Logged In:" + msgReceived.strName);
@@ -173,10 +155,7 @@ namespace SocketsNetwork
                     Debug.WriteLine("<<<" + strName + " has joined the room>>>\r\n");
                 else
                     Form1.Instance.DetermineFunction(msgReceived.function, msgReceived.objects);
-
-                //if (msgReceived.strMessage != null && msgReceived.cmdCommand != Command.List)
-                //    txtChatBox.Text += msgReceived.strMessage + "\r\n";
-
+               
                 byteData = new byte[1024];
 
                 clientSocket.BeginReceive(byteData,
